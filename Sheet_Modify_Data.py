@@ -1,10 +1,10 @@
 import pandas as pd
 # ModifyCategories_data
 def ModifyCategories_data(df):
-    filter_condition = df['Modi_group'].notna()
+    filter_condition = df['Modi_En'].notna()
     filtered_data = df[filter_condition]
 
-    ModifyCategories_data = filtered_data.iloc[:, [1,0,1,1]]
+    ModifyCategories_data = filtered_data.iloc[:, [1,0,1,2]]
 
     columns_to_insert = {
         'FontColor': pd.Series(['#FFFFFF'] * len(filtered_data), index=filtered_data.index),
@@ -20,7 +20,7 @@ def ModifyCategories_data(df):
 
 # ModifyItem_data
 def ModifyItem_data(df):
-    ModifyItem_data = df.iloc[:, [0,3,5,2,3,4]]
+    ModifyItem_data = df.iloc[:, [0,4,6,3,4,5]]
     columns_to_insert = {
         'FontColor': pd.Series(['#FFFFFF'] * len(df), index=df.index),
         'BackgroundColor': pd.Series(['#1FA3DC'] * len(df), index=df.index),

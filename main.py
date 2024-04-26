@@ -2,10 +2,11 @@ import pandas as pd
 from openpyxl import load_workbook
 from Sheet_Item_Data import Group_data, Categories_data, MenuItems_data, CatalogyToItem_data
 from Sheet_Modify_Data import ModifyItem_data, ModifyCategories_data
-from filedialog import select_excel_file
+from filedialog import select_excel_file, save_excel_file
 
 # Read the data from 'china.xlsx'
 df_input = select_excel_file()
+# print(df_input)
 df_item = pd.read_excel(df_input, sheet_name='item')
 df_modi = pd.read_excel(df_input, sheet_name='modify')
 
@@ -20,7 +21,8 @@ processed_data = {
 }
 
 # Write processed data to a new Excel file 'china_final.xlsx'
-with pd.ExcelWriter('D:/china_final.xlsx', engine='openpyxl') as writer:
+# print(df_output)
+with pd.ExcelWriter(save_excel_file(), engine='openpyxl') as writer:
     for sheet_name, table_data in processed_data.items():
         # Write each DataFrame to a separate sheet
         table_data.to_excel(writer, sheet_name=sheet_name, index=False)
