@@ -40,7 +40,7 @@ def Categories_data(df):
 
 ## MenuItems_data
 def MenuItems_data(df):
-    MenuItems_data = df.iloc[:, [7,9,0,6,6,7,8]]
+    MenuItems_data = df.iloc[:, [7,9,10,6,6,7,8]]
     columns_to_insert = {
         'FontColor': pd.Series(['#FFFFFF'] * len(df), index=df.index),
         'BackgroundColor': pd.Series(['#355d6e'] * len(df), index=df.index),
