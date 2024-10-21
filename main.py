@@ -34,3 +34,32 @@ with pd.ExcelWriter(save_excel_file(), engine='openpyxl') as writer:
         # Delete the first row (header)
         worksheet.delete_rows(1)
         
+# Mysql variants syntaxs saved in .sql 
+df_variant = pd.read_excel(df_input, sheet_name='menu_item_variants')
+variant_first_column = df_variant.iloc[:, 0]
+
+with open('variant.sql', 'w', encoding='utf-8') as f:
+    f.write("INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`)  VALUES\n")
+    for i, item in enumerate(variant_first_column):
+    
+        f.write(f"{item}")  
+        
+        if i == len(variant_first_column) - 1:
+            f.write(";\n")
+        else:
+            f.write(",\n")
+
+# Mysql language syntaxs saved in .sql 
+df_language = pd.read_excel(df_input, sheet_name='Language_list')
+language_first_column = df_language.iloc[:, 0]
+
+with open('language.sql', 'w', encoding='utf-8') as f:
+    f.write("INSERT INTO `userve`.`language_lists` (`id`, `ref_id`, `name`, `form_slug`, `language`, `created_at`, `updated_at`)  VALUES\n")
+    for i, item in enumerate(language_first_column):
+    
+        f.write(f"{item}")  
+        
+        if i == len(language_first_column) - 1:
+            f.write(";\n")
+        else:
+            f.write(",\n")
