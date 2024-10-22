@@ -1,14 +1,22 @@
+import os
 import pandas as pd
 from openpyxl import load_workbook
 from Sheet_Item_Data import Group_data, Categories_data, MenuItems_data, CatalogyToItem_data
 from Sheet_Modify_Data import ModifyItem_data, ModifyCategories_data
 from filedialog import select_excel_file, save_excel_file
 
+# Get the path to the desktop
+desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+# Create the full path for the SQL file
+file_path = os.path.join(desktop, 'variant.sql')
+
 # Read the data from 'china.xlsx'
 df_input = select_excel_file()
-# print(df_input)
 df_item = pd.read_excel(df_input, sheet_name='item')
 df_modi = pd.read_excel(df_input, sheet_name='modify')
+df_variant = pd.read_excel(df_input, sheet_name='menu_item_variants')
+
+
 
 # Process data using custom functions
 processed_data = {
@@ -34,32 +42,16 @@ with pd.ExcelWriter(save_excel_file(), engine='openpyxl') as writer:
         # Delete the first row (header)
         worksheet.delete_rows(1)
         
-# Mysql variants syntaxs saved in .sql 
-df_variant = pd.read_excel(df_input, sheet_name='menu_item_variants')
+# variants
 variant_first_column = df_variant.iloc[:, 0]
 
-with open('variant.sql', 'w', encoding='utf-8') as f:
+# Write SQL to the file on the desktop
+with open(file_path, 'w', encoding='utf-8') as f:
     f.write("INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`)  VALUES\n")
     for i, item in enumerate(variant_first_column):
-    
-        f.write(f"{item}")  
+        f.write(f"{item}")
         
         if i == len(variant_first_column) - 1:
-            f.write(";\n")
-        else:
-            f.write(",\n")
-
-# Mysql language syntaxs saved in .sql 
-df_language = pd.read_excel(df_input, sheet_name='Language_list')
-language_first_column = df_language.iloc[:, 0]
-
-with open('language.sql', 'w', encoding='utf-8') as f:
-    f.write("INSERT INTO `userve`.`language_lists` (`id`, `ref_id`, `name`, `form_slug`, `language`, `created_at`, `updated_at`)  VALUES\n")
-    for i, item in enumerate(language_first_column):
-    
-        f.write(f"{item}")  
-        
-        if i == len(language_first_column) - 1:
             f.write(";\n")
         else:
             f.write(",\n")
