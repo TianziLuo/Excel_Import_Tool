@@ -47,7 +47,8 @@ variant_first_column = df_variant.iloc[:, 0]
 
 # Write SQL to the file on the desktop
 with open(file_path, 'w', encoding='utf-8') as f:
-    f.write("UPDATE `userve`.`menu_items` SET `has_variants` = '1' WHERE (`id` >= '1'); \n"
+    f.write("UPDATE `userve`.`menu_items` SET `has_variants` = '1' WHERE (`id` >= '1' and 'item_type' = 3); \n"
+            "UPDATE `userve`.`menu_items` SET `is_discountable` = '1' WHERE (`id` >= '1'); \n"
             "INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`)  VALUES\n")
     for i, item in enumerate(variant_first_column):
         f.write(f"{item}")
