@@ -1,10 +1,13 @@
 import os
 import pandas as pd
+import subprocess
 from openpyxl import load_workbook
 from Sheet_Item_Data import Group_data, Categories_data, MenuItems_data, CatalogyToItem_data
 from Sheet_Modify_Data import ModifyItem_data, ModifyCategories_data
 from filedialog import select_excel_file, save_excel_file
 
+
+## step 1
 # Get the path to the desktop
 desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 # Create the full path for the SQL file
@@ -47,7 +50,7 @@ variant_first_column = df_variant.iloc[:, 0]
 
 # Write SQL to the file on the desktop
 with open(file_path, 'w', encoding='utf-8') as f:
-    f.write("UPDATE `userve`.`menu_items` SET `has_variants` = '1' WHERE (`id` >= '1' and 'item_type' = 3); \n"
+    f.write(
             "UPDATE `userve`.`menu_items` SET `is_discountable` = '1' WHERE (`id` >= '1'); \n"
             "INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`)  VALUES\n")
     for i, item in enumerate(variant_first_column):
@@ -57,3 +60,18 @@ with open(file_path, 'w', encoding='utf-8') as f:
             f.write(";\n")
         else:
             f.write(",\n")
+
+
+## step 2
+program_path = r"D:\uServePro menu input 1.6\MenuXlsImport.exe"
+
+try:
+    # Use subprocess to open the program
+    subprocess.Popen(program_path, shell=True)
+    print(f"Successfully opened the program: {program_path}")
+except FileNotFoundError:
+    # Handle the case where the program is not found
+    print(f"Program not found: {program_path}")
+except Exception as e:
+    # Handle any other exceptions
+    print(f"An error occurred: {e}")
