@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 import subprocess
-from openpyxl import load_workbook
+import mysql.connector
+from mysql.connector import Error
 from Sheet_Item_Data import Group_data, Categories_data, MenuItems_data, CatalogyToItem_data
 from Sheet_Modify_Data import ModifyItem_data, ModifyCategories_data
 from filedialog import select_excel_file, save_excel_file
@@ -75,3 +76,27 @@ except FileNotFoundError:
 except Exception as e:
     # Handle any other exceptions
     print(f"An error occurred: {e}")
+
+
+mysql_workbench_path = r"C:\Program Files\MySQL\MySQL Workbench 8.0 CE\MySQLWorkbench.exe"
+
+if os.path.exists(mysql_workbench_path):
+    os.startfile(mysql_workbench_path)
+    try:
+        connection = mysql.connector.connect(
+            host="127.0.0.1",
+            port=3308,
+            user="root",
+            password="123456"
+        )
+        if connection.is_connected():
+            print("Connection to MySQL database was successful!")
+    except Error as e:
+        print(f"Error while connecting to MySQL: {e}")
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+            print("MySQL connection is closed.")
+else:
+    print(f"Path not found: {mysql_workbench_path}. Please verify the path and try again.")
+
