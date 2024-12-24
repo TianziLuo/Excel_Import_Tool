@@ -13,8 +13,12 @@ df_input = select_excel_file()
 df_language = pd.read_excel(df_input, sheet_name='Language_list')
 language_first_column = df_language.iloc[:, 0]
 
+tax = input("Enter tax rate: ")
+
 with open(file_path, 'w', encoding='utf-8') as f:
-    f.write("INSERT INTO `userve`.`language_lists` (`id`, `ref_id`, `name`, `form_slug`, `language`, `created_at`, `updated_at`)  VALUES\n")
+    f.write(
+         f"UPDATE `userve`.`setting_tax_lists` SET `rate` = '{tax}' WHERE (`id` = '1');\n"
+        "INSERT INTO `userve`.`language_lists` (`id`, `ref_id`, `name`, `form_slug`, `language`, `created_at`, `updated_at`)  VALUES\n")
     for i, item in enumerate(language_first_column):
     
         f.write(f"{item}")  
