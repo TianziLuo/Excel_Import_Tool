@@ -12,7 +12,7 @@ from filedialog import select_excel_file, save_excel_file
 # Get the path to the desktop
 desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 # Create the full path for the SQL file
-file_path = os.path.join(desktop, 'variant.sql')
+file_path_necessary = os.path.join(desktop, 'necessary.sql')
 
 # Read the data from 'china.xlsx'
 df_input = select_excel_file()
@@ -45,22 +45,37 @@ with pd.ExcelWriter(save_excel_file(), engine='openpyxl') as writer:
         
         # Delete the first row (header)
         worksheet.delete_rows(1)
-        
-# variants
+
+#necessary sql syntax  
+tax = input("Enter tax rate: ")
+
+with open(file_path_necessary, 'w', encoding='utf-8') as f:
+    f.write(
+            f"UPDATE `userve`.`setting_tax_lists` SET `rate` = '{tax}' WHERE (`id` = '1');\n"
+            "UPDATE `userve`.`menu_items` SET `is_discountable` = '1' WHERE (`id` >= '1'); \n"
+            )
+    
+#variant sql if available
+# Extract the first column of the 'menu_item_variants' DataFrame
 variant_first_column = df_variant.iloc[:, 0]
 
-# Write SQL to the file on the desktop
-with open(file_path, 'w', encoding='utf-8') as f:
-    f.write(
-            "UPDATE `userve`.`menu_items` SET `is_discountable` = '1' WHERE (`id` >= '1'); \n"
-            "INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`)  VALUES\n")
-    for i, item in enumerate(variant_first_column):
-        f.write(f"{item}")
-        
-        if i == len(variant_first_column) - 1:
-            f.write(";\n")
-        else:
-            f.write(",\n")
+# Check if the column is not empty
+if not variant_first_column.empty:
+    # Define the SQL file path for variants
+    file_path_variant = os.path.join(desktop, 'variant.sql')
+    
+    # Write SQL to the file on the desktop
+    with open(file_path_variant, 'w', encoding='utf-8') as f:
+        f.write(
+            "INSERT INTO `userve`.`menu_item_variants` (`id`, `item_id`, `name`, `price`, `extra_price`, `sort`, `created_at`, `updated_at`) VALUES\n"
+        )
+        for i, item in enumerate(variant_first_column):
+            f.write(f"{item}")
+            
+            if i == len(variant_first_column) - 1:
+                f.write(";\n")
+            else:
+                f.write(",\n")
 
 
 ## step 2
