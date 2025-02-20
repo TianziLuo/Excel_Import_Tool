@@ -79,7 +79,9 @@ if not variant_first_column.empty:
 
 
 ## step 2
-program_path = r"D:\uServePro menu input 1.6\MenuXlsImport.exe"
+# Ensure the working directory is correct
+script_dir = os.path.dirname(os.path.abspath(__file__))  # Get script's directory
+program_path = os.path.join(script_dir, "Restaurant Menu Input", "MenuXlsImport.exe")
 
 try:
     # Use subprocess to open the program
